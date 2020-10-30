@@ -11,6 +11,7 @@ public class EchoClient {
     private DataInputStream input = null;
     private DataInputStream serverInput = null;
     private DataOutputStream out = null;
+    private BufferedInputStream bis = null;
 
     public EchoClient(int port)
     {
@@ -25,6 +26,8 @@ public class EchoClient {
             serverInput = new DataInputStream(socket.getInputStream());
 
             out = new DataOutputStream(socket.getOutputStream());
+
+            bis = new BufferedInputStream(socket.getInputStream());
         }
 
         catch(IOException u)
@@ -44,6 +47,8 @@ public class EchoClient {
                 line = input.readLine();
                 assert out != null;
 
+
+                //Send Image
                 BufferedImage image = ImageIO.read(new File("src/" + line));
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 ImageIO.write(image, "jpg", byteArrayOutputStream);
@@ -54,11 +59,38 @@ public class EchoClient {
 
                 line = "Over";
 
+                //Receive all images from server
+
+
+                int fileCount = serverInput.readInt();
+                File[] files = new File[fileCount];
+
+                for(int i = 0; i<fileCount;i++)
+                {
+                    String fileName = serverInput.readUTF();
+
+                    byte[] sizeAr = new byte[4];
+                    serverInput.read(sizeAr);
+                    int sizeReceive = ByteBuffer.wrap(sizeAr).asIntBuffer().get();
+
+                    byte[] imageAr = new byte[sizeReceive];
+                    serverInput.read(imageAr);
+
+                    BufferedImage imageReceive = ImageIO.read(new ByteArrayInputStream(imageAr));
+
+                    ImageIO.write(imageReceive,"jpg", new File("src/Client/Images/"+fileName));
+                }
+
+
             }
 
             catch(IOException i)
             {
                 System.out.println(i);
+            }
+
+            catch (NullPointerException n) {
+                return;
             }
         }
 
