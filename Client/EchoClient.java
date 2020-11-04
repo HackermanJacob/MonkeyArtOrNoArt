@@ -49,7 +49,7 @@ public class EchoClient {
 
 
                 //Send Image
-                BufferedImage image = ImageIO.read(new File("src/" + line));
+                BufferedImage image = ImageIO.read(new File("./" + line));
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 ImageIO.write(image, "jpg", byteArrayOutputStream);
                 byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
@@ -60,7 +60,6 @@ public class EchoClient {
                 line = "Over";
 
                 //Receive all images from server
-
 
                 int fileCount = serverInput.readInt();
                 File[] files = new File[fileCount];
@@ -78,7 +77,7 @@ public class EchoClient {
 
                     BufferedImage imageReceive = ImageIO.read(new ByteArrayInputStream(imageAr));
 
-                    ImageIO.write(imageReceive,"jpg", new File("src/Client/Images/"+fileName));
+                    ImageIO.write(imageReceive,"jpg", new File("./RecievedImages/"+fileName));
                 }
 
 

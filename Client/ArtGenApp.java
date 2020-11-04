@@ -1,3 +1,4 @@
+
 // Monkey Art Generator - ArtGenApp.java
 // Jacob M Bengel 2020-Nov-1
 import java.awt.Color;

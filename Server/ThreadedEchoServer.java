@@ -1,7 +1,7 @@
-package Server;
-
 import java.net.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 public class ThreadedEchoServer {
@@ -19,14 +19,19 @@ public class ThreadedEchoServer {
             //String path = sc.nextLine();
             //path = path+"\\";
             //Creating a File object
-            file = new File("src/Server/Images");
+
+
+
+            //file = new File("src/Server/Images");
             //Creating the directory
+            /*
             boolean bool = file.mkdir();
             if(bool){
                 System.out.println("Directory created successfully");
             }else{
                 System.out.println("Sorry couldn’t create specified directory");
             }
+             */
 
             serversocket = new ServerSocket(port);
             Socket socket = null;

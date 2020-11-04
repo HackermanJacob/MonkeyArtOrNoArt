@@ -1,8 +1,5 @@
-// Monkey Art Generator - ArtGenerator.java
-// Jacob M Bengel 2020-Nov-1
-// ArtGenerator object class is constructed using variable parameters
-// and used to write an image to a folder.
-// FYI: image coordinates start at the top left.
+
+
 import java.awt.Color;
 // import java.awt.Component;
 // import java.awt.Frame;
@@ -65,7 +62,7 @@ public void createArt() throws IOException {
 	//save image - will overwrite if same filename
 	//TODO implement subdirectory solution e.g. ./Images/blueSquares/*.jpg
 	String imageName = "generic_image";
-	ImageIO.write (image, "jpg", new File ( "./output/" + imageName + ".jpg" ));
+	ImageIO.write (image, "jpg", new File ( "./Images/" + imageName + ".jpg" ));
 }
 
 public void addTestingShapes() {

@@ -1,4 +1,4 @@
-package Server;
+
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -50,22 +50,20 @@ public class EchoThread extends Thread
                 in.read(imageAr);
 
                 BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageAr));
-                File[] serverFiles = new File("src/Client/Images").listFiles();
-                System.out.println(serverFiles.length);
+                File[] serverFiles = new File("./Images").listFiles();
+                //System.out.println(serverFiles.length)
 
-                File file = new File("src/Server/Images/test"+serverFiles.length+".jpg");
-
-                ImageIO.write(image,"jpg", file);
+                ImageIO.write(image,"jpg", new File("./Images/test"+serverFiles.length+".jpg"));
 
 
                 //Send all Server.Images to user
-                File[] files = new File("src/Server/Images").listFiles();
+                File[] files = new File("./Images").listFiles();
                 out.writeInt(files.length);
 
 
                 for(File f: files)
                 {
-                    String name = file.getName();
+                    String name = f.getName();
                     out.writeUTF(name);
 
                     BufferedImage imageSend = ImageIO.read(f);
