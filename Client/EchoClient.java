@@ -77,7 +77,7 @@ public class EchoClient {
 
                     BufferedImage imageReceive = ImageIO.read(new ByteArrayInputStream(imageAr));
 
-                    ImageIO.write(imageReceive,"jpg", new File("./RecievedImages/"+fileName));
+                    ImageIO.write(imageReceive,"jpg", new File("./ReceivedImages/"+fileName));
                 }
 
 
