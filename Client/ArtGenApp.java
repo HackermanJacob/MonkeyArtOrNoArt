@@ -1,6 +1,3 @@
-
-// Monkey Art Generator - ArtGenApp.java
-// Jacob M Bengel 2020-Nov-1
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Frame;
@@ -13,10 +10,31 @@ import java.util.*;
 import javax.imageio.*;
 public class ArtGenApp {
 public static void main(String[] args) throws IOException {
-     //TODO make this work with our user input solution
-     ArtGenerator monkey = new ArtGenerator();
-     monkey.addSimpleSquare(800, 360, 60);
-     monkey.createArt();
-     System.out.println("Art finished.");
+	//TODO make this work with our user input solution
+// 	ArtGenerator monkey = new ArtGenerator();
+// 	monkey.addSimpleSquare(800, 360, 60);
+// 	monkey.addTestingShapes();
+	
+	//set up static/meta information
+	ArtGenerator.setOutputSubdirectory("demo");
+	ArtGenerator.makeOutputSubdirectory();
+	ArtGenerator.setArtName("demoArt");
+	
+	ArrayList<ArtGenerator> monkeys = new ArrayList<>();
+	int numberOfImagesToOutput = 20;
+	for (int i = 0; i < 20; i++) {
+		monkeys.add(new ArtGenerator());
+	}
+	for (ArtGenerator monkey : monkeys) {
+		monkey.setBackgroundColorRGB(106, 90, 205);
+		monkey.addSimpleSquareRandom();
+		monkey.addSimpleSquareRandom();
+		monkey.addSimpleSquareRandom();
+		monkey.addSimpleSquareRandom();
+		monkey.addSimpleSquareRandom();
+		monkey.addTestingColors();
+		monkey.createArt();
+	}
+	System.out.println("Art finished.");
 }//end main
 }//end class 

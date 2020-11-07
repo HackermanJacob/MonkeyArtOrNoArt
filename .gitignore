@@ -1,6 +1,8 @@
 # Ignore image folder contents
 **/Images/*.png
 **/Images/*.jpg
+**/Images/**/*.png
+**/Images/**/*.jpg
 
 # Compiled class file
 *.class
