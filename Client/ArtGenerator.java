@@ -1,3 +1,5 @@
+
+
 import java.awt.Color;
 // import java.awt.Component;
 // import java.awt.Frame;
@@ -79,7 +81,7 @@ public void createArt() throws IOException {
 	
 	//save image - will overwrite if same filename
 	//png takes less space than jpg on my system - Jacob B
-	ImageIO.write (image, "png", new File ( "./Images" + outputSubdirectory + "/" + artName + id + ".png" ));
+	ImageIO.write (image, "png", new File ( "./Images" + outputSubdirectory + "/" + artName + id + ".jpg" ));
 }
 
 //change max area of generated shapes (by number of pixels)

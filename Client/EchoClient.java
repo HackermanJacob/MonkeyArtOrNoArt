@@ -1,39 +1,48 @@
-package Client;
+
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.net.*;
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.util.Scanner;
 
 public class EchoClient {
-    private Socket socket = null;
-    private DataInputStream input = null;
-    private DataInputStream serverInput = null;
-    private DataOutputStream out = null;
-    private BufferedInputStream bis = null;
 
-    public EchoClient(int port)
+    public static void main(String[] args)
     {
-        try
-        {
+        Socket socket = null;
+        DataInputStream input = null;
+        DataInputStream serverInput = null;
+        DataOutputStream out = null;
+        BufferedInputStream bis = null;
 
-            socket = new Socket("localhost", port);
-            System.out.println("Connected");
+        boolean valid = false;
+        while (!valid) {
+            try {
+                Scanner s = new Scanner(System.in);
+                System.out.print("Enter In a port to join: ");
+                int port = Integer.parseInt(s.nextLine());
 
-            input = new DataInputStream(System.in);
+                socket = new Socket("localhost", port);
+                valid = true;
 
-            serverInput = new DataInputStream(socket.getInputStream());
+                System.out.println("Connected");
 
-            out = new DataOutputStream(socket.getOutputStream());
+                input = new DataInputStream(System.in);
 
-            bis = new BufferedInputStream(socket.getInputStream());
+                serverInput = new DataInputStream(socket.getInputStream());
+
+                out = new DataOutputStream(socket.getOutputStream());
+
+                bis = new BufferedInputStream(socket.getInputStream());
+            } catch (ConnectException c) {
+                System.out.println("Invalid Socket");
+            } catch (IOException u) {
+                System.out.println(u);
+            }
         }
 
-        catch(IOException u)
-        {
-            System.out.println(u);
-        }
 
         String line = "";
         String serverLine = "";
@@ -49,7 +58,7 @@ public class EchoClient {
 
 
                 //Send Image
-                BufferedImage image = ImageIO.read(new File("./" + line));
+                BufferedImage image = ImageIO.read(new File("./Images/demo/" + line));
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 ImageIO.write(image, "jpg", byteArrayOutputStream);
                 byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
@@ -92,12 +101,6 @@ public class EchoClient {
                 return;
             }
         }
-
-    }
-
-    public static void main(String[] args) throws SocketException
-    {
-        EchoClient client = new EchoClient(1978);
     }
 
 }

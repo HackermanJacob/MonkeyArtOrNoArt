@@ -1,3 +1,5 @@
+
+
 import java.net.*;
 import java.io.*;
 import java.nio.file.Files;
@@ -5,36 +7,22 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 public class ThreadedEchoServer {
-    private ServerSocket serversocket = null;
-    private Socket socket = null;
-    private Scanner s = null;
-    private File file = null;
-    public int totalImages = 0;
 
-    public ThreadedEchoServer(int port){
+    public static void main(String[] args) throws Exception {
+        ServerSocket serversocket = null;
+        Socket socket = null;
+        Scanner s = null;
+        File file = null;
+        int totalImages = 0;
+
+        s = new Scanner(System.in);
+        System.out.print("Enter In a port for the server: ");
+        int port = Integer.parseInt(s.nextLine());
+
         try
         {
-            //System.out.println("Enter the path to create a directory: ");
-            //Scanner sc = new Scanner(System.in);
-            //String path = sc.nextLine();
-            //path = path+"\\";
-            //Creating a File object
-
-
-
-            //file = new File("src/Server/Images");
-            //Creating the directory
-            /*
-            boolean bool = file.mkdir();
-            if(bool){
-                System.out.println("Directory created successfully");
-            }else{
-                System.out.println("Sorry couldn’t create specified directory");
-            }
-             */
 
             serversocket = new ServerSocket(port);
-            Socket socket = null;
         }
 
         catch (IOException u) {
@@ -61,9 +49,5 @@ public class ThreadedEchoServer {
 
             new EchoThread(socket, totalImages).start();
         }
-    }
-
-    public static void main(String[] args) throws Exception {
-        ThreadedEchoServer server = new ThreadedEchoServer(1978);
     }
 }
