@@ -17,14 +17,16 @@ public static void main(String[] args) throws IOException {
 // 	monkey.addSimpleSquare(800, 360, 60);
 // 	monkey.addTestingShapes();
 	
-	//set up static/meta information
+	//set up static/meta information for output
 	ArtGenerator.setOutputSubdirectory("demo");
 	ArtGenerator.makeOutputSubdirectory();
 	ArtGenerator.setArtName("demoArt");
 	
+	/*
+	//using default constructor on many objects
 	ArrayList<ArtGenerator> monkeys = new ArrayList<>();
 	int numberOfImagesToOutput = 20;
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < numberOfImagesToOutput; i++) {
 		monkeys.add(new ArtGenerator());
 	}
 	for (ArtGenerator monkey : monkeys) {
@@ -37,6 +39,27 @@ public static void main(String[] args) throws IOException {
 		monkey.addTestingColors();
 		monkey.createArt();
 	}
+	*/
+	
+	//using constructor that shares shape/color lists
+	ArrayList<ArtGenerator> monkeys = new ArrayList<>();
+	int numberOfImagesToOutput = 20;
+	ArtGenerator template = new ArtGenerator();
+	{
+		template.setBackgroundColorRGB(106, 90, 205);
+		template.addSimpleSquareRandom();
+		template.addSimpleSquareRandom();
+		template.addSimpleSquareRandom();
+		template.addSimpleSquareRandom();
+		template.addSimpleSquareRandom();
+		template.addTestingColors();
+	}
+	for (int i = 0; i < numberOfImagesToOutput; i++) {
+		ArtGenerator monkey = new ArtGenerator(template);
+		monkey.createArt();
+	}
+	
+	
 	System.out.println("Art finished.");
 }//end main
 }//end class 

@@ -47,7 +47,21 @@ public ArtGenerator() {
 	backgroundColor = Color.WHITE;
 	palette = new ArrayList<Color>();
 }
-//TODO better constuctors - may be written based off of how the GUI looks/works
+//copy another object - be careful when modifying arraylists if using this
+public ArtGenerator(ArtGenerator other) {
+	id = count++;
+	if (count > limit) {
+		System.err.println("Too many generators. Limit of " + limit + " exceeded.");
+		throw new RuntimeException("Generator limit exceeded"); //just in case someone is about to write more than ten thousand files to their machine
+	}
+	this.shapeMaxArea = other.shapeMaxArea;
+	image = new BufferedImage (imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
+	g2D = image.createGraphics(); //graphics context created from buffered image object
+	ran = new Random();
+	this.shapes = other.shapes;
+	this.backgroundColor = other.backgroundColor;
+	this.palette = other.palette;
+}
 
 //---methods
 //set subdirectory for organized output - recommended to use
@@ -80,8 +94,10 @@ public void createArt() throws IOException {
 	}
 	
 	//save image - will overwrite if same filename
-	//png takes less space than jpg on my system - Jacob B
-	ImageIO.write (image, "png", new File ( "./Images" + outputSubdirectory + "/" + artName + id + ".jpg" ));
+	//if you want to change the file type you should change the actual file type as well as the extension
+	String extension = "png"; //use jpg to take more storage
+	ImageIO.write (image, extension, new File ("./Images" + outputSubdirectory + "/" + artName + id + "." + extension));
+// 	ImageIO.write (image, "png", new File ( "./Images" + outputSubdirectory + "/" + artName + id + ".png" ));
 }
 
 //change max area of generated shapes (by number of pixels)
@@ -130,7 +146,7 @@ public Color getRandomColor() {
 	return palette.get(ran.nextInt(palette.size()));
 }
 
-//adds a square to the shapes list. (x, y) is top left corner
+//adds a square to the shapes list
 public void addSimpleSquare(int x, int y, int length) {
      shapes.add(new Rectangle(x, y, length, length));
 }
@@ -141,7 +157,7 @@ public void addSimpleSquareRandom() {
 	int length = ran.nextInt((int)Math.pow(shapeMaxArea, .5));
 	addSimpleSquare(x, y, length);
 }
-//adds a rectangle to the shapes list. (x, y) is top left corner
+//adds a rectangle to the shapes list
 public void addSimpleRectangle(int x, int y, int width, int height) {
      shapes.add(new Rectangle(x, y, width, height));
 }
