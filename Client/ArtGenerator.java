@@ -47,21 +47,6 @@ public ArtGenerator() {
 	backgroundColor = Color.WHITE;
 	palette = new ArrayList<Color>();
 }
-//copy another object - be careful when modifying arraylists if using this
-public ArtGenerator(ArtGenerator other) {
-	id = count++;
-	if (count > limit) {
-		System.err.println("Too many generators. Limit of " + limit + " exceeded.");
-		throw new RuntimeException("Generator limit exceeded"); //just in case someone is about to write more than ten thousand files to their machine
-	}
-	this.shapeMaxArea = other.shapeMaxArea;
-	image = new BufferedImage (imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
-	g2D = image.createGraphics(); //graphics context created from buffered image object
-	ran = new Random();
-	this.shapes = other.shapes;
-	this.backgroundColor = other.backgroundColor;
-	this.palette = other.palette;
-}
 
 //---methods
 //set subdirectory for organized output - recommended to use
@@ -153,13 +138,30 @@ public void addSimpleSquare(int x, int y, int length) {
 public void addSimpleSquareRandom() {
 	int x = ran.nextInt(imageWidth);
 	int y = ran.nextInt(imageHeight);
-	//randomly select square size up to the largest allowed
+	//randomly select square size up to the largest allowed area
 	int length = ran.nextInt((int)Math.pow(shapeMaxArea, .5));
 	addSimpleSquare(x, y, length);
 }
 //adds a rectangle to the shapes list
 public void addSimpleRectangle(int x, int y, int width, int height) {
      shapes.add(new Rectangle(x, y, width, height));
+}
+public void addSimpleRectangleRandom() {
+	int x = ran.nextInt(imageWidth);
+	int y = ran.nextInt(imageHeight);
+	int width = 0;
+	int height = 0;
+	int area = -1;
+	while (area < 0 || area > shapeMaxArea) { //random sizes until valid area
+		width = ran.nextInt(imageWidth);
+		height = ran.nextInt(imageHeight);
+		area = width * height;
+	}
+	addSimpleRectangle(x, y, width, height);
+}
+//adds a triangle to the shapes list
+public void addSimpleTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
+	shapes.add(new Polygon(new int[] {x1, x2, x3}, new int[] {y1, y2, y3}, 3));
 }
 
 
