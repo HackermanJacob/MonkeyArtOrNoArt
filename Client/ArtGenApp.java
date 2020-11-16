@@ -17,51 +17,26 @@ public static void main(String[] args) throws IOException {
 // 	monkey.addSimpleSquare(800, 360, 60);
 // 	monkey.addTestingShapes();
 	
-	//set up static information for file output
+	//set up static/meta information
 	ArtGenerator.setOutputSubdirectory("demo");
 	ArtGenerator.makeOutputSubdirectory();
 	ArtGenerator.setArtName("demoArt");
 	
-	
-	//initialize arraylist
 	ArrayList<ArtGenerator> monkeys = new ArrayList<>();
 	int numberOfImagesToOutput = 20;
-	for (int i = 0; i < numberOfImagesToOutput; i++) {
+	for (int i = 0; i < 20; i++) {
 		monkeys.add(new ArtGenerator());
 	}
-	//loop over objects to add unique shapes/colors to each
 	for (ArtGenerator monkey : monkeys) {
-// 		monkey.setBackgroundColorRGB(106, 90, 205);
-		monkey.setBackgroundColor(Color.WHITE);
-// 		monkey.addTestingColors();
-		monkey.addColorRGB(cNum(), cNum(), cNum());
-		monkey.addColorRGB(cNum(), cNum(), cNum());
-		monkey.addColorRGB(cNum(), cNum(), cNum());
-		monkey.addColorRGB(cNum(), cNum(), cNum());
-		monkey.addColorRGB(cNum(), cNum(), cNum());
-		
+		monkey.setBackgroundColorRGB(106, 90, 205);
 		monkey.addSimpleSquareRandom();
-		monkey.addSimpleRectangleRandom();
-		monkey.addSimpleTriangleRandom();
-		monkey.addRightTriangleRandom();
-		monkey.addSimpleEllipseRandom();
-		monkey.addSimpleCircleRandom();
-		monkey.addSimpleCircleRandom();
-		monkey.addSimpleCircleRandom();
-		monkey.addSimpleCircleRandom();
-		monkey.addSimpleCircleRandom();
-		
+		monkey.addSimpleSquareRandom();
+		monkey.addSimpleSquareRandom();
+		monkey.addSimpleSquareRandom();
+		monkey.addSimpleSquareRandom();
+		monkey.addTestingColors();
 		monkey.createArt();
 	}
-	
-	
-	
 	System.out.println("Art finished.");
 }//end main
-//random value for rgb color
-private static int cNum() {
-	Random ran = new Random();
-	return ran.nextInt(255+1);
-}
-
 }//end class 
