@@ -22,14 +22,14 @@ public class EchoThread extends Thread
     {
         DataInputStream in = null;
         DataOutputStream out = null;
+        BufferedReader is = null;
         Scanner s = null;
-        BufferedOutputStream bos = null;
 
         try
         {
             in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
             out = new DataOutputStream(socket.getOutputStream());
-            bos = new BufferedOutputStream(socket.getOutputStream());
+            is = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         }
 
         catch (IOException u) {
@@ -39,48 +39,60 @@ public class EchoThread extends Thread
         String line = "";
         String serverLine = "";
 
+        while(!line.equals("q")) {
             try {
-
-                //Receive Image
-                byte[] sizeAr = new byte[4];
-                in.read(sizeAr);
-                int size = ByteBuffer.wrap(sizeAr).asIntBuffer().get();
-
-                byte[] imageAr = new byte[size];
-                in.read(imageAr);
-
-                BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageAr));
-                File[] serverFiles = new File("./Images").listFiles();
-                //System.out.println(serverFiles.length)
-
-                ImageIO.write(image,"jpg", new File("./Images/test"+serverFiles.length+".jpg"));
+                line = is.readLine();
+                System.out.println(line);
 
 
-                //Send all Server.Images to user
-                File[] files = new File("./Images").listFiles();
-                out.writeInt(files.length);
+                if (line.equals("s")) {
+                    //Receive Image
+                    byte[] sizeAr = new byte[4];
+                    in.read(sizeAr);
+                    int size = ByteBuffer.wrap(sizeAr).asIntBuffer().get();
 
+                    byte[] imageAr = new byte[size];
+                    in.read(imageAr);
 
-                for(File f: files)
-                {
-                    String name = f.getName();
-                    out.writeUTF(name);
-
-                    BufferedImage imageSend = ImageIO.read(f);
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    ImageIO.write(imageSend, "jpg", byteArrayOutputStream);
-                    byte[] sizeSend = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
-                    out.write(sizeSend);
-                    out.write(byteArrayOutputStream.toByteArray());
-                    out.flush();
+                    BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageAr));
+                    File[] serverFiles = new File("./Images").listFiles();
+                    //System.out.println(serverFiles.length)
+                    if(image != null) {
+                        ImageIO.write(image, "jpg", new File("./Images/test" + serverFiles.length + ".jpg"));
+                    }
+                    System.out.println("Received Image");
                 }
 
+                if (line.equals("r")) {
+                    //Send all Server.Images to user
+                    File[] files = new File("./Images").listFiles();
+                    out.writeInt(files.length);
 
 
+                    for (File f : files) {
+                        String name = f.getName();
+                        out.writeUTF(name);
 
-            } catch (IOException i) {
-                System.out.println(i);
+                        BufferedImage imageSend = ImageIO.read(f);
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        ImageIO.write(imageSend, "jpg", byteArrayOutputStream);
+                        byte[] sizeSend = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
+                        out.write(sizeSend);
+                        out.write(byteArrayOutputStream.toByteArray());
+                        out.flush();
+                    }
+
+                    System.out.println("Sending Images");
+                }
             }
+
+         catch (IOException i) {
+        System.out.println(i);
+         }
+
+
+    }
+
 
 
 
@@ -91,7 +103,6 @@ public class EchoThread extends Thread
             socket.close();
             in.close();
             out.close();
-
         }
 
         catch (IOException i) {
