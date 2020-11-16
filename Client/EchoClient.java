@@ -71,7 +71,7 @@ public class EchoClient {
                     line = input.readLine();
                     assert out != null;
 
-                    BufferedImage image = ImageIO.read(new File("./Images/demo/" + line));
+                    BufferedImage image = ImageIO.read(new File("./ImagesClient/demo/" + line));
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     ImageIO.write(image, "jpg", byteArrayOutputStream);
                     byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
