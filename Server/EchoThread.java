@@ -1,4 +1,10 @@
-
+/*
+* EchoThread.java
+*
+* This class uses threading as it acts as the place where sending and receiving
+* is handled per client (One thread per client). The class is used to receive images
+* from the user and send the file of all images from all users.
+ */
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -12,12 +18,25 @@ public class EchoThread extends Thread
     protected Socket socket;
     protected int totalImage;
 
+    /* EchoThread
+    * creates an echo thread
+    *
+    * @param clientSocket the socket of the client
+    * @param totalImage the amount of connections
+    *
+    * @return void
+     */
     public EchoThread(Socket clientSocket, int totalImage)
     {
         this.socket = clientSocket;
         this.totalImage = totalImage;
     }
 
+    /* run
+    *runs the thread
+    *
+    * @return void
+     */
     public void run()
     {
         DataInputStream in = null;

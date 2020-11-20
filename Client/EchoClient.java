@@ -1,4 +1,11 @@
-
+/*
+* EchoClient.java
+*
+* The client class allows the user to interact with server by sending and viewing images
+* sent by the user and other users.The class is also used to interact with the gui and
+* generate images. The class has no predefined order and depends on sending commands between
+* the server and the client such as a (s)ending or (r)ecieving.
+ */
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

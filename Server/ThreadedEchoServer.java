@@ -1,4 +1,10 @@
-
+/*
+* ThreadedEchoServer.java
+*
+* This class is used to create the general outline server as well
+* controlling what happens when a new user connects and what port
+* the server is on.
+ */
 
 import java.net.*;
 import java.io.*;
