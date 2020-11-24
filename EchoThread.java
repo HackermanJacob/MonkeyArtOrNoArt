@@ -74,17 +74,18 @@ public class EchoThread extends Thread
                     in.read(imageAr);
 
                     BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageAr));
-                    File[] serverFiles = new File("./Images").listFiles();
+                    File[] serverFiles = new File("src/Images").listFiles();
                     //System.out.println(serverFiles.length)
-                    if(image != null) {
-                        ImageIO.write(image, "jpg", new File("./Images/test" + serverFiles.length + ".jpg"));
+                    if(image != null && serverFiles != null) {
+                        ImageIO.write(image, "jpg", new File("src/Images/test" + serverFiles.length + ".jpg"));
                     }
+
                     System.out.println("Received Image");
                 }
 
                 if (line.equals("r")) {
                     //Send all Server.Images to user
-                    File[] files = new File("./Images").listFiles();
+                    File[] files = new File("src/Images").listFiles();
                     out.writeInt(files.length);
 
 

@@ -18,7 +18,7 @@ public static void main(String[] args) throws IOException {
 // 	monkey.addTestingShapes();
 	
 	//set up static/meta information
-	ArtGenerator.setOutputSubdirectory("demo");
+	ArtGenerator.setOutputSubdirectory("");
 	ArtGenerator.makeOutputSubdirectory();
 	ArtGenerator.setArtName("demoArt");
 	
