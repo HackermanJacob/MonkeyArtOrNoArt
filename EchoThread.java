@@ -58,60 +58,52 @@ public class EchoThread extends Thread
         String line = "";
         String serverLine = "";
 
-        while(!line.equals("q")) {
-            try {
-                line = is.readLine();
-                System.out.println(line);
+
+        try {
 
 
-                if (line.equals("s")) {
-                    //Receive Image
-                    byte[] sizeAr = new byte[4];
-                    in.read(sizeAr);
-                    int size = ByteBuffer.wrap(sizeAr).asIntBuffer().get();
+            //Receive Image
+            byte[] sizeAr = new byte[4];
+            in.read(sizeAr);
+            int size = ByteBuffer.wrap(sizeAr).asIntBuffer().get();
 
-                    byte[] imageAr = new byte[size];
-                    in.read(imageAr);
+            byte[] imageAr = new byte[size];
+            in.read(imageAr);
 
-                    BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageAr));
-                    File[] serverFiles = new File("src/Images").listFiles();
-                    //System.out.println(serverFiles.length)
-                    if(image != null && serverFiles != null) {
-                        ImageIO.write(image, "jpg", new File("src/Images/test" + serverFiles.length + ".jpg"));
-                    }
-
-                    System.out.println("Received Image");
-                }
-
-                if (line.equals("r")) {
-                    //Send all Server.Images to user
-                    File[] files = new File("src/Images").listFiles();
-                    out.writeInt(files.length);
-
-
-                    for (File f : files) {
-                        String name = f.getName();
-                        out.writeUTF(name);
-
-                        BufferedImage imageSend = ImageIO.read(f);
-                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        ImageIO.write(imageSend, "jpg", byteArrayOutputStream);
-                        byte[] sizeSend = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
-                        out.write(sizeSend);
-                        out.write(byteArrayOutputStream.toByteArray());
-                        out.flush();
-                    }
-
-                    System.out.println("Sending Images");
-                }
+            BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageAr));
+            File[] serverFiles = new File("./Images").listFiles();
+            //System.out.println(serverFiles.length)
+            if (image != null && serverFiles != null) {
+                ImageIO.write(image, "jpg", new File("./Images/test" + serverFiles.length + ".jpg"));
             }
+
+            System.out.println("Received Image");
+
+
+            //Send all Server.Images to user
+            File[] files = new File("./Images").listFiles();
+            out.writeInt(files.length);
+
+
+            for (File f : files) {
+                String name = f.getName();
+                out.writeUTF(name);
+
+                BufferedImage imageSend = ImageIO.read(f);
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                ImageIO.write(imageSend, "jpg", byteArrayOutputStream);
+                byte[] sizeSend = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
+                out.write(sizeSend);
+                out.write(byteArrayOutputStream.toByteArray());
+                out.flush();
+            }
+
+            System.out.println("Sending Images");
+        }
 
          catch (IOException i) {
         System.out.println(i);
          }
-
-
-    }
 
 
 

@@ -20,11 +20,13 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Button;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ProjectGUI extends Application {
@@ -34,7 +36,11 @@ public class ProjectGUI extends Application {
     int currentIndex = 0;
 
     ImageView image = null;
-    EchoClient client = null;
+
+
+    ArrayList<ArtGenerator> monkeys = new ArrayList<>();
+
+    Stage window;
 
     CheckBox red;
     CheckBox green;
@@ -52,18 +58,19 @@ public class ProjectGUI extends Application {
 
 
     @Override
-    public void start(Stage primaryStage) throws  Exception{
+    public void start(Stage primaryStage) throws Exception{
+        ArtGenerator.setArtName("art");
 
-        client = new EchoClient();
+        for(int i = 0; i < 50; i++)
+            monkeys.add(new ArtGenerator());
 
-        client.createSocket();
 
-        Scene scene2 = new Scene(secondWindow(),1280,790);
-        Stage window = primaryStage;
+
+        window = primaryStage;
         root = new BorderPane();
         root.setTop(getTopLabel());
         root.setLeft(addVBoxColor());
-        root.setCenter(addVboxLook(window, scene2));
+
 
         Scene scene = new Scene(root, 1720, 790);
         primaryStage.setTitle("Monkey Gen.2000");
@@ -139,21 +146,12 @@ public class ProjectGUI extends Application {
         //This uses lambda functions, but if you don't know how this black magic works (like me), it basically just calls the method the
         //arrow is pointing to.
 
-        Button leftArrow = new Button("<--");
-        leftArrow.setOnAction(e ->leftArrow(leftArrow));
-        Button rightArrow = new Button("-->");
-        rightArrow.setOnAction(e ->rightArrow(rightArrow));
         select = new Button("Select You Favorite Image");
 
         select.setDisable(true);
 
         // METHOD
-        select.setOnAction(e -> {
-            try {
-                selectMethod(window, scene2);
-            } catch (IOException ignored) {
-            }
-        });
+
 
         String userMessage = "The Image generator has \nnow created images.\n" +
                 "This has been done according to \nuser specifacations that you entered." +
@@ -165,7 +163,6 @@ public class ProjectGUI extends Application {
         search.setPadding(new Insets(20,20,20,20));
 
 
-        leftRight.getChildren().addAll(leftArrow,rightArrow);
         search.getChildren().addAll(title3,leftRight,select, message);
         return search;
 
@@ -197,23 +194,53 @@ public class ProjectGUI extends Application {
         return displayImage;
     }
 
-    //Below here is gonna be a second image method (because I'm guessing we need one for the server images and one for the local images)
-    //It is not being used but can be.
-
-    public Pane imageDisplay2(){
-        Pane displayImage = new HBox();
-        image = new ImageView("ReceivedImages/test0.jpg");
-        displayImage.getChildren().add(image);
-        return displayImage;
-    }
-
     //This is where all the handling of the buttons/checkmarks being. Currently passing void but you can change that if needed.
     //For now it will print what was selected. to the command line if you run it.
 
-    public void imageOptions(){
+    public void imageOptions() {
         String message = "The selected traits are:";
 
         // checkbox.isSelected()
+
+        for(ArtGenerator monkey : monkeys)
+        {
+            monkey.setBackgroundColorRGB(106, 90, 205);
+
+            if(red.isSelected())
+                monkey.addColorRGB(255,0,0);
+            if(green.isSelected())
+                monkey.addColorRGB(0,255,0);
+            if(blue.isSelected())
+                monkey.addColorRGB(0,0,255);
+            if(yellow.isSelected())
+                monkey.addColorRGB(230, 237, 36);
+            if(orange.isSelected())
+                monkey.addColorRGB(245, 157, 42);
+            if(square.isSelected())
+                for(int i = 0; i < 5; i++)
+                    monkey.addSimpleSquareRandom();
+
+            if(circle.isSelected())
+                for(int i = 0; i < 5; i++)
+                    monkey.addSimpleCircleRandom();
+
+            if(rectangle.isSelected())
+                for(int i = 0; i < 5; i++)
+                    monkey.addSimpleRectangleRandom();
+
+            if(triangle.isSelected())
+                for(int i = 0; i < 5; i++)
+                    monkey.addSimpleTriangleRandom();
+
+            else if(!red.isSelected() && !green.isSelected() && !blue.isSelected() && !yellow.isSelected() && !orange.isSelected())
+                monkey.addColor(Color.WHITE);
+
+             try {
+                 monkey.createArt();
+             }
+             catch (IOException ignore) {}
+
+        }
 
         red.setDisable(true);
         green.setDisable(true);
@@ -225,78 +252,121 @@ public class ProjectGUI extends Application {
         rectangle.setDisable(true);
         triangle.setDisable(true);
         generate.setDisable(true);
-        select.setDisable(false);
 
-        root.setRight(imageDisplay());
-    }
-
-    public void leftArrow(Button leftArrow){
-        System.out.println("Left Pressed");
-
-        if(currentIndex > 0) {
-            currentIndex--;
-            image.setImage(new Image("ImagesClient/art" + currentIndex + ".jpg"));
-        }
-    }
-
-    public void rightArrow(Button rightArrow){
-        System.out.println("Right Pressed");
-        if(currentIndex < 49) {
-            currentIndex++;
-            image.setImage(new Image("ImagesClient/art" + currentIndex + ".jpg"));
-            image.setPreserveRatio(true);
-        }
+        window.close();
     }
 
 
-    public void leftArrow2(Button leftArrow){
-        System.out.println("Left Pressed");
-
-        if(currentIndex > 0) {
-            currentIndex--;
-            image.setImage(new Image("ReceivedImages/test" + currentIndex + ".jpg"));
-        }
-
-    }
-
-    public void rightArrow2(Button rightArrow){
-        System.out.println("Right Pressed");
-        if(currentIndex < 49) {
-            currentIndex++;
-            image.setImage(new Image("ReceivedImages/test" + currentIndex + ".jpg"));
-            image.setPreserveRatio(true);
-        }
-    }
-
-    public VBox secondWindow(){
-        VBox second = new VBox();
-        HBox leftRight = new HBox();
-        HBox imageView = new HBox();
-
-        imageView.setPadding(new Insets(20,20,20,20));
-
-
-        Button leftArrow = new Button("<--");
-        leftArrow.setOnAction(e ->leftArrow2(leftArrow));
-        Button rightArrow = new Button("-->");
-        rightArrow.setOnAction(e ->rightArrow2(rightArrow));
-        leftRight.getChildren().addAll(leftArrow,rightArrow);
-        leftRight.setAlignment(Pos.TOP_CENTER);
-        imageView.getChildren().addAll(imageDisplay2());
-        imageView.setAlignment(Pos.TOP_CENTER);
-        second.getChildren().addAll(leftRight,image);
-        return second;
-    }
-
-    public void selectMethod(Stage window, Scene scene2) throws IOException {
-        client.send("art" + currentIndex + ".jpg");
-        client.receive();
-        window.setScene(scene2);
-        currentIndex = 0;
-        image.setImage(new Image("ReceivedImages/test0.jpg"));
-    }
 
     public static void main(String [] args){
         launch(args);
+
+        Scanner s = new Scanner(System.in);
+        Socket socket = null;
+        DataInputStream input = null;
+        DataInputStream serverInput = null;
+        DataOutputStream out = null;
+
+
+        boolean valid = false;
+        while (!valid) {
+            try {
+                s = new Scanner(System.in);
+                System.out.print("Enter In a port to send your creation to: ");
+                int port = Integer.parseInt(s.nextLine());
+
+                socket = new Socket("localhost", port);
+                valid = true;
+
+                System.out.println("Connected");
+
+                input = new DataInputStream(System.in);
+
+                serverInput = new DataInputStream(socket.getInputStream());
+
+                out = new DataOutputStream(socket.getOutputStream());
+
+
+            } catch (ConnectException c) {
+                System.out.println("Invalid Socket");
+            } catch (IOException u) {
+                System.out.println(u);
+            } catch (NumberFormatException n) {
+                System.out.println("Must be a number");
+            }
+        }
+
+
+        System.out.println("Go to ImagesClient to search for you favorite image");
+        System.out.print("What was the number of your favorite image: ");
+        int imageIndex = Integer.parseInt(s.nextLine());
+
+        System.out.println();
+
+        try {
+
+
+            //Send Image
+            assert out != null;
+
+            BufferedImage image = ImageIO.read(new File("./ImagesClient/art"+ imageIndex + ".jpg"));
+
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(image, "jpg", byteArrayOutputStream);
+            byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
+            out.write(size);
+            out.write(byteArrayOutputStream.toByteArray());
+            out.flush();
+
+            System.out.println("Sending Image\n");
+
+        }
+
+        catch(IOException i)
+        {
+            System.out.println(i);
+        }
+
+        catch (NullPointerException n) {
+            return;
+        }
+
+
+        try {
+            //Receive all images from server
+
+            int fileCount = serverInput.readInt();
+            File[] files = new File[fileCount];
+
+            for (int i = 0; i < fileCount; i++) {
+                String fileName = serverInput.readUTF();
+
+                byte[] sizeAr = new byte[4];
+                serverInput.read(sizeAr);
+                int sizeReceive = ByteBuffer.wrap(sizeAr).asIntBuffer().get();
+
+                byte[] imageAr = new byte[sizeReceive];
+                serverInput.read(imageAr);
+
+                BufferedImage imageReceive = ImageIO.read(new ByteArrayInputStream(imageAr));
+
+                ImageIO.write(imageReceive, "jpg", new File("./ReceivedImages/" + fileName));
+            }
+
+        }
+
+        catch(IOException i)
+        {
+            System.out.println(i);
+        }
+
+        catch (NullPointerException n) {
+            return;
+        }
+
+        System.out.println("Open Received Images to explore other the creations of other monkeys");
+
+
     }
 }

@@ -57,7 +57,7 @@ public static void setOutputSubdirectory(String s) {
 }
 //creates output subdirectory; does nothing if it exists
 public static void makeOutputSubdirectory() {
-	File dir = new File("./Images" + outputSubdirectory);
+	File dir = new File("./ImagesClient");
 	if (!dir.exists()) {
 		dir.mkdir();
 	}
@@ -81,8 +81,8 @@ public void createArt() throws IOException {
 	
 	//save image - will overwrite if same filename
 	//if you want to change the file type you should change the actual file type as well as the extension
-	String extension = "png"; //use jpg to take more storage
-	ImageIO.write (image, extension, new File ("./Images" + outputSubdirectory + "/" + artName + id + "." + extension));
+	String extension = "jpg"; //use jpg to take more storage
+	ImageIO.write (image, extension, new File ("./ImagesClient/" + artName + id + "." + extension));
 // 	ImageIO.write (image, "png", new File ( "./Images" + outputSubdirectory + "/" + artName + id + ".png" ));
 }
 
