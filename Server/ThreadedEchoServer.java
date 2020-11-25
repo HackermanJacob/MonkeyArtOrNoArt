@@ -19,7 +19,7 @@ public class ThreadedEchoServer {
         Socket socket = null;
         Scanner s = null;
         File file = null;
-        int totalImages = 0;
+      
 
         s = new Scanner(System.in);
         System.out.print("Enter In a port for the server: ");
@@ -41,7 +41,7 @@ public class ThreadedEchoServer {
             {
                 socket = serversocket.accept();
                 System.out.println("Client joined");
-                totalImages ++;
+              
             }
 
             catch(NullPointerException n)
@@ -53,7 +53,7 @@ public class ThreadedEchoServer {
                 e.printStackTrace();
             }
 
-            new EchoThread(socket, totalImages).start();
+            new EchoThread(socket).start();
         }
     }
 }
