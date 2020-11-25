@@ -72,7 +72,7 @@ public class ProjectGUI extends Application {
         root.setLeft(addVBoxColor());
 
 
-        Scene scene = new Scene(root, 1720, 790);
+        Scene scene = new Scene(root, 300, 450);
         primaryStage.setTitle("Monkey Gen.2000");
         primaryStage.setScene(scene);
         primaryStage.show();

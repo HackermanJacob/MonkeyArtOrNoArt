@@ -82,11 +82,13 @@ public class EchoThread extends Thread
 
             //Send all Server.Images to user
             File[] files = new File("./Images").listFiles();
-            out.writeInt(files.length);
+            out.writeInt(files.length-1);
 
 
             for (File f : files) {
                 String name = f.getName();
+		if(name.substring(name.length()-3).equals("jpg"))
+		{
                 out.writeUTF(name);
 
                 BufferedImage imageSend = ImageIO.read(f);
@@ -96,6 +98,7 @@ public class EchoThread extends Thread
                 out.write(sizeSend);
                 out.write(byteArrayOutputStream.toByteArray());
                 out.flush();
+		}
             }
 
             System.out.println("Sending Images");
