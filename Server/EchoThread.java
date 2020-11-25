@@ -16,20 +16,18 @@ import java.util.Scanner;
 public class EchoThread extends Thread
 {
     protected Socket socket;
-    protected int totalImage;
 
     /* EchoThread
     * creates an echo thread
     *
     * @param clientSocket the socket of the client
-    * @param totalImage the amount of connections
     *
     * @return void
      */
-    public EchoThread(Socket clientSocket, int totalImage)
+    public EchoThread(Socket clientSocket)
     {
         this.socket = clientSocket;
-        this.totalImage = totalImage;
+   
     }
 
     /* run
